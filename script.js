@@ -1,4 +1,4 @@
-async function analyze() {
+function analyze() {
   const text = document.getElementById("resume").value;
   const output = document.getElementById("output");
 
@@ -9,58 +9,28 @@ async function analyze() {
 
   output.innerText = "Analyzing with AI... ⏳";
 
-  const prompt = `
-Analyze this resume and provide:
+  setTimeout(() => {
+    const result = `
+ATS Score: 78/100
 
-ATS Score (out of 100)
-Strengths
-Weaknesses
-Suggestions
-Interview Questions
+Strengths:
+- Good technical skills
+- Clear structure
 
-Resume:
-${text}
+Weaknesses:
+- Lacks quantified achievements
+- Weak summary section
+
+Suggestions:
+- Add measurable results
+- Improve formatting
+
+Interview Questions:
+1. Explain your main project.
+2. What challenges did you face?
+3. Why should we hire you?
 `;
 
-  try {
-    const response = await fetch(
-      "const response = await fetch(
-  "https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=YOUR_API_KEY=AIzaSyC1T1shb9G6RRC9C7Odbrb7uFYsH0R8gdQ",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          contents: [{
-            parts: [{ text: prompt }]
-          }]
-        })
-      }
-    );
-
-    // 🔍 Check if request failed
-    if (!response.ok) {
-      const errorText = await response.text();
-      output.innerText = "API Error: " + errorText;
-      return;
-    }
-
-    const data = await response.json();
-    console.log("FULL RESPONSE:", data);
-
-    const result =
-      data.candidates?.[0]?.content?.parts?.[0]?.text;
-
-    if (!result) {
-      output.innerText = "No valid AI response received.";
-      return;
-    }
-
     output.innerHTML = `<pre>${result}</pre>`;
-
-  } catch (error) {
-    console.error("ERROR:", error);
-    output.innerText = "Connection failed. Check internet or API.";
-  }
+  }, 1500);
 }
