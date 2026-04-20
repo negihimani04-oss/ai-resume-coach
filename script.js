@@ -1,4 +1,4 @@
-function analyze() {
+async function analyze() {
   const text = document.getElementById("resume").value;
   const output = document.getElementById("output");
 
@@ -7,28 +7,29 @@ function analyze() {
     return;
   }
 
-  // Show loading
-  output.innerText = "Analyzing your resume... ⏳";
+  output.innerText = "Analyzing with AI... ⏳";
 
-  setTimeout(() => {
-    let score = Math.floor(Math.random() * 30) + 70;
+  try {
+    const response = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=YOUR_API_KEY", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        contents: [{
+          parts: [{
+            text: `Analyze this resume and give ATS score, strengths, weaknesses, and suggestions:\n\n${text}`
+          }]
+        }]
+      })
+    });
 
-    let result = `ATS Score: ${score}/100\n\n`;
+    const data = await response.json();
 
-    if (text.toLowerCase().includes("project")) {
-      result += "✅ Strength: Good project experience\n";
-    } else {
-      result += "❌ Weakness: Add more projects\n";
-    }
-
-    if (text.length < 200) {
-      result += "❌ Resume too short\n";
-    } else {
-      result += "✅ Good content length\n";
-    }
-
-    result += "\n💡 Suggestions:\n- Improve formatting\n- Add skills section\n- Include achievements";
-
+    const result = data.candidates[0].content.parts[0].text;
     output.innerText = result;
-  }, 1500);
+
+  } catch (error) {
+    output.innerText = "Error analyzing resume.";
+  }
 }
