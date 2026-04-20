@@ -24,7 +24,7 @@ ${text}
 
   try {
     const response = await fetch(
-      "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=AIzaSyC1T1shb9G6RRC9C7Odbrb7uFYsH0R8gdQ",
+      "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash-001:generateContent?key=AIzaSyC1T1shb9G6RRC9C7Odbrb7uFYsH0R8gdQ",
       {
         method: "POST",
         headers: {
