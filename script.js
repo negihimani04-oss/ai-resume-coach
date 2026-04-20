@@ -7,39 +7,55 @@ async function analyze() {
     return;
   }
 
-  output.innerText = "Analyzing... ⏳";
+  output.innerText = "Analyzing with AI... ⏳";
 
   const prompt = `
-Analyze this resume and provide:
+You are an ATS Resume Analyzer.
 
-1. ATS Score (out of 100)
-2. Strengths
-3. Weaknesses
-4. Suggestions for improvement
-5. 5 Interview Questions
+Analyze the resume and give output in this format:
+
+ATS Score: (out of 100)
+
+Strengths:
+- point 1
+- point 2
+
+Weaknesses:
+- point 1
+- point 2
+
+Suggestions:
+- point 1
+- point 2
+
+Interview Questions:
+1. Question
+2. Question
+3. Question
 
 Resume:
 ${text}
 `;
 
   try {
-    const response = await fetch("https://ai-resume-coach-676938536113.asia-south1.run.app/analyze", {
+    const response = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=YOUR_API_KEY", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ text: prompt })
+      body: JSON.stringify({
+        contents: [{
+          parts: [{ text: prompt }]
+        }]
+      })
     });
 
     const data = await response.json();
-
-    const result =
-      data.candidates?.[0]?.content?.parts?.[0]?.text ||
-      "No response from AI.";
+    const result = data.candidates[0].content.parts[0].text;
 
     output.innerHTML = `<pre>${result}</pre>`;
 
   } catch (error) {
-    output.innerText = "Error connecting to AI.";
+    output.innerText = "Error analyzing resume.";
   }
 }
