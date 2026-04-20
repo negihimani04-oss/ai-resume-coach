@@ -26,7 +26,7 @@ ${text}
 
   try {
     const response = await fetch(
-      "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=key=YOUR_NEW_KEY",
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyC1T1shb9G6RRC9C7Odbrb7uFYsH0R8gdQ",
       {
         method: "POST",
         headers: {
