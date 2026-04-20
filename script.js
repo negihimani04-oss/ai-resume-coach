@@ -3,33 +3,30 @@ async function analyze() {
   const output = document.getElementById("output");
 
   if (!text) {
-    alert("Paste your resume first!");
+    output.innerText = "Please paste your resume first!";
     return;
   }
 
-  output.innerText = "Analyzing with AI... ⏳";
+  output.innerText = "Analyzing... ⏳";
 
   try {
-    const response = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=YOUR_API_KEY", {
+    const response = await fetch("https://console.cloud.google.com/home/dashboard?project=ai-resume-coach-493412/analyze", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({
-        contents: [{
-          parts: [{
-            text: `Analyze this resume and give ATS score, strengths, weaknesses, and suggestions:\n\n${text}`
-          }]
-        }]
-      })
+      body: JSON.stringify({ text })
     });
 
     const data = await response.json();
 
-    const result = data.candidates[0].content.parts[0].text;
+    const result =
+      data.candidates?.[0]?.content?.parts?.[0]?.text ||
+      "No response from AI.";
+
     output.innerText = result;
 
   } catch (error) {
-    output.innerText = "Error analyzing resume.";
+    output.innerText = "Error connecting to AI.";
   }
 }
